@@ -41,6 +41,7 @@ import {
   writeCodexAppServerBinding,
   type CodexAppServerAuthProfileLookup,
   type CodexAppServerBindingIdentity,
+  type CodexAppServerContextEngineBinding,
   type CodexAppServerThreadBinding,
 } from "./session-binding.js";
 
@@ -63,6 +64,10 @@ export type CodexPluginThreadConfigProvider = {
 export const CODEX_CODE_MODE_THREAD_CONFIG: JsonObject = {
   "features.code_mode": true,
   "features.code_mode_only": true,
+};
+
+export const CODEX_LIGHTWEIGHT_CONTEXT_THREAD_CONFIG: JsonObject = {
+  project_doc_max_bytes: 0,
 };
 
 function resolveCodexAppServerBindingIdentity(
@@ -118,7 +123,7 @@ export async function startOrResumeThread(params: {
           previousEngineId: binding.contextEngine?.engineId,
         },
       );
-      await clearCodexAppServerBinding(params.params.sessionFile);
+      await clearCodexAppServerBinding(bindingIdentity);
       binding = undefined;
       rotatedContextEngineBinding = true;
     }
@@ -127,7 +132,7 @@ export async function startOrResumeThread(params: {
     embeddedAgentLog.debug("codex app-server user MCP config changed; starting a new thread", {
       threadId: binding.threadId,
     });
-    await clearCodexAppServerBinding(params.params.sessionFile);
+    await clearCodexAppServerBinding(bindingIdentity);
     binding = undefined;
   }
   if (
@@ -138,7 +143,7 @@ export async function startOrResumeThread(params: {
     embeddedAgentLog.debug("codex app-server MCP config changed; starting a new thread", {
       threadId: binding.threadId,
     });
-    await clearCodexAppServerBinding(params.params.sessionFile);
+    await clearCodexAppServerBinding(bindingIdentity);
     binding = undefined;
   }
   if (binding?.threadId) {
@@ -183,7 +188,7 @@ export async function startOrResumeThread(params: {
     embeddedAgentLog.debug("codex app-server MCP config changed; starting a new thread", {
       threadId: binding.threadId,
     });
-    await clearCodexAppServerBinding(params.params.sessionFile);
+    await clearCodexAppServerBinding(bindingIdentity);
     binding = undefined;
   }
   if (binding?.threadId) {
