@@ -526,7 +526,7 @@ describe("resolveApiKeyForProfile openai-codex refresh fallback", () => {
       ttlMs: expect.any(Number),
       allowKeychainPrompt: false,
     });
-    const persisted = await readPersistedStore(agentDir);
+    const persisted = await readRawPersistedStore(agentDir);
     const persistedProfile = requireOAuthProfile(persisted, profileId);
     expect(persistedProfile.accountId).toBe("acct-shared");
     expect(persistedProfile).not.toHaveProperty("access");
@@ -581,7 +581,7 @@ describe("resolveApiKeyForProfile openai-codex refresh fallback", () => {
       email: "user@example.com",
     });
 
-    const persisted = await readPersistedStore(agentDir);
+    const persisted = await readRawPersistedStore(agentDir);
     const persistedProfile = requireOAuthProfile(persisted, profileId);
     expect(persistedProfile.accountId).toBe("acct-shared");
     expect(persistedProfile.email).toBe("user@example.com");
