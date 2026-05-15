@@ -129,12 +129,19 @@ function resolveAcpSessionRecordKey(record: unknown): string {
     return "";
   }
   const fields = record as {
+    acpxRecordId?: unknown;
     name?: unknown;
     sessionKey?: unknown;
     id?: unknown;
     sessionId?: unknown;
   };
-  for (const value of [fields.name, fields.sessionKey, fields.id, fields.sessionId]) {
+  for (const value of [
+    fields.acpxRecordId,
+    fields.name,
+    fields.sessionKey,
+    fields.id,
+    fields.sessionId,
+  ]) {
     if (typeof value === "string" && value.trim()) {
       return value.trim();
     }

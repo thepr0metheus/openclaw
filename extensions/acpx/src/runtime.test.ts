@@ -1,10 +1,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { resetPluginStateStoreForTests } from "../../../src/plugin-state/plugin-state-store.js";
 import { AcpRuntimeError, type AcpRuntime, type AcpRuntimeEvent } from "../runtime-api.js";
 import { OPENCLAW_ACPX_LEASE_ID_ARG, OPENCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
-import { AcpxRuntime, __testing } from "./runtime.js";
+import { AcpxRuntime, __testing, createSqliteSessionStore } from "./runtime.js";
 
 type TestSessionStore = {
   load(sessionId: string): Promise<Record<string, unknown> | undefined>;
@@ -16,6 +17,7 @@ const DOCUMENTED_OPENCLAW_BRIDGE_COMMAND =
 const CODEX_ACP_COMMAND = "npx @zed-industries/codex-acp@0.13.0";
 const CODEX_ACP_WRAPPER_COMMAND = `node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"`;
 const CODEX_ACP_WRAPPER_COMMAND_WITH_LEASE = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+const ORIGINAL_STATE_DIR = process.env.OPENCLAW_STATE_DIR;
 
 function makeRuntime(
   baseStore: TestSessionStore,
@@ -130,6 +132,40 @@ function readFirstEnsureSessionInput(ensure: {
 describe("AcpxRuntime fresh reset wrapper", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    if (ORIGINAL_STATE_DIR === undefined) {
+      delete process.env.OPENCLAW_STATE_DIR;
+    } else {
+      process.env.OPENCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+    }
+    resetPluginStateStoreForTests();
+  });
+
+  it("keys SQLite session records by acpxRecordId before display name", async () => {
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-acpx-session-store-"));
+    process.env.OPENCLAW_STATE_DIR = stateDir;
+    resetPluginStateStoreForTests();
+
+    const store = createSqliteSessionStore();
+    const record = {
+      name: "agent:codex:acp:oneshot",
+      sessionKey: "agent:codex:acp:oneshot",
+      acpxRecordId: "agent:codex:acp:oneshot:run-1",
+    };
+
+    try {
+      await store.save(record as never);
+
+      await expect(store.load(record.acpxRecordId)).resolves.toMatchObject({
+        acpxRecordId: record.acpxRecordId,
+      });
+      await expect(store.load(record.name)).resolves.toBeUndefined();
+    } finally {
+      resetPluginStateStoreForTests();
+      await fs.rm(stateDir, { recursive: true, force: true });
+    }
   });
 
   it("rejects unsupported runtime session modes with a clear AcpRuntimeError (issue #73071)", async () => {
