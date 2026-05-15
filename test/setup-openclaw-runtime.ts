@@ -8,6 +8,7 @@ import type { OpenClawConfig } from "../src/config/config.js";
 import type { OutboundSendDeps } from "../src/infra/outbound/deliver.js";
 import type { PluginRegistry } from "../src/plugins/registry.js";
 import { closeOpenClawAgentDatabasesForTest } from "../src/state/openclaw-agent-db.js";
+import { closeOpenClawStateDatabaseForTest } from "../src/state/openclaw-state-db.js";
 import { installSharedTestSetup } from "./setup.shared.js";
 
 installSharedTestSetup();
@@ -362,6 +363,7 @@ afterEach(async () => {
   const { resetContextWindowCacheForTest, resetModelCatalogReadyCacheForTest } =
     await loadWorkerCleanupHelpers();
   closeOpenClawAgentDatabasesForTest();
+  closeOpenClawStateDatabaseForTest();
   resetContextWindowCacheForTest();
   resetModelCatalogReadyCacheForTest();
   await installDefaultPluginRegistry();
@@ -369,4 +371,5 @@ afterEach(async () => {
 
 afterAll(async () => {
   closeOpenClawAgentDatabasesForTest();
+  closeOpenClawStateDatabaseForTest();
 });
