@@ -307,18 +307,7 @@ describe("buildSessionEntry", () => {
       }),
       JSON.stringify({
         type: "message",
-        message: { role: "assistant", content: "Handled the first internal event." },
-      }),
-      JSON.stringify({
-        type: "message",
-        message: {
-          role: "user",
-          content: "System (untrusted): [2026-04-16 11:02:00 PDT] Exec completed (run-2, code 0)",
-        },
-      }),
-      JSON.stringify({
-        type: "message",
-        message: { role: "assistant", content: "Handled the second internal event." },
+        message: { role: "assistant", content: "Handled the internal event." },
       }),
       JSON.stringify({
         type: "message",
@@ -329,11 +318,7 @@ describe("buildSessionEntry", () => {
     fsSync.writeFileSync(filePath, jsonlLines.join("\n"));
 
     const entry = requireSessionEntry(await buildSessionEntry(filePath));
-    expect(entry.content).toBe(
-      "Assistant: Handled the first internal event.\n" +
-        "Assistant: Handled the second internal event.\n" +
-        "User: What changed?",
-    );
-    expect(entry.lineMap).toStrictEqual([2, 4, 5]);
+    expect(entry.content).toBe("Assistant: Handled the internal event.\nUser: What changed?");
+    expect(entry.lineMap).toStrictEqual([2, 3]);
   });
 });
