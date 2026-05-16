@@ -501,7 +501,7 @@ export function createMSTeamsMessageHandler(deps: MSTeamsMessageHandlerDeps) {
     core.system.enqueueSystemEvent(`${inboundLabel}: ${preview}`, {
       sessionKey: route.sessionKey,
       contextKey: `msteams:message:${conversationId}:${activity.id ?? "unknown"}`,
-      forceSenderIsOwnerFalse: true,
+      forceSenderIsOwnerFalse: false,
     });
 
     const channelId = conversationId;
