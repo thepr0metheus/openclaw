@@ -8,7 +8,7 @@ vi.mock("openclaw/plugin-sdk/system-event-runtime", () => ({
 }));
 
 describe("enqueueIMessageReactionSystemEvent", () => {
-  it("matches Discord by enqueueing inbound reactions as untrusted system events", () => {
+  it("matches Discord by enqueueing inbound reactions as non-owner system events", () => {
     const runtime = { log: vi.fn(), error: vi.fn(), exit: vi.fn() } satisfies RuntimeEnv;
     const logVerbose = vi.fn();
 
@@ -34,7 +34,6 @@ describe("enqueueIMessageReactionSystemEvent", () => {
         sessionKey: "agent:main:main",
         contextKey: "imessage:reaction:added:3:lobster-reply-guid:+15555550123:👎",
         forceSenderIsOwnerFalse: true,
-        trusted: false,
       },
     );
     expect(runtime.log).toHaveBeenCalledWith(

@@ -82,7 +82,6 @@ function cloneSystemEvent(event: QueuedSystemEvent): SystemEvent {
   return {
     ...event,
     ...(event.deliveryContext ? { deliveryContext: { ...event.deliveryContext } } : {}),
-    trusted: !event.forceSenderIsOwnerFalse,
   };
 }
 

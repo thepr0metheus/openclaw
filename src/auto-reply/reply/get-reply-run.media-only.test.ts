@@ -2030,9 +2030,9 @@ describe("runPreparedReply media-only handling", () => {
     expect(call?.followupRun.run.senderIsOwner).toBe(true);
   });
 
-  it("does not downgrade sender ownership when trusted event text contains the untrusted marker", async () => {
+  it("does not downgrade sender ownership when owner-inheriting text mentions the old marker", async () => {
     vi.mocked(drainFormattedSystemEventBlock).mockResolvedValueOnce({
-      text: "System: [t] Relay text mentions System (untrusted): but event is trusted.",
+      text: "System: [t] Relay text mentions System (untrusted): but metadata keeps owner authority.",
       forceSenderIsOwnerFalse: false,
     });
     const params = ownerParams();

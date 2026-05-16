@@ -302,7 +302,6 @@ export function buildGatewayCronService(params: {
         sessionKey,
         contextKey: opts?.contextKey,
         forceSenderIsOwnerFalse: opts?.forceSenderIsOwnerFalse,
-        trusted: opts?.forceSenderIsOwnerFalse !== true,
       });
     },
     requestHeartbeat: (opts) => {

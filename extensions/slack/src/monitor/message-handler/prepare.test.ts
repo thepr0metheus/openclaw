@@ -164,7 +164,6 @@ describe("slack prepareSlackMessage inbound contract", () => {
       sessionKey: prepared.ctxPayload.SessionKey,
       contextKey: "slack:message:D123:1.000",
       forceSenderIsOwnerFalse: true,
-      trusted: false,
     });
   });
 

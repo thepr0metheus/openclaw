@@ -295,4 +295,45 @@ describe("buildSessionEntry", () => {
     expect(entry.content).toBe("Assistant: User-facing summary.\nUser: Actual user follow-up.");
     expect(entry.lineMap).toStrictEqual([2, 3]);
   });
+
+  it("drops generated system wrapper turns without dropping assistant replies", async () => {
+    const jsonlLines = [
+      JSON.stringify({
+        type: "message",
+        message: {
+          role: "user",
+          content: "System: [2026-04-16 11:01:00 PDT] Exec completed (run-1, code 0)",
+        },
+      }),
+      JSON.stringify({
+        type: "message",
+        message: { role: "assistant", content: "Handled the first internal event." },
+      }),
+      JSON.stringify({
+        type: "message",
+        message: {
+          role: "user",
+          content: "System (untrusted): [2026-04-16 11:02:00 PDT] Exec completed (run-2, code 0)",
+        },
+      }),
+      JSON.stringify({
+        type: "message",
+        message: { role: "assistant", content: "Handled the second internal event." },
+      }),
+      JSON.stringify({
+        type: "message",
+        message: { role: "user", content: "What changed?" },
+      }),
+    ];
+    const filePath = path.join(tmpDir, "generated-system-wrappers.jsonl");
+    fsSync.writeFileSync(filePath, jsonlLines.join("\n"));
+
+    const entry = requireSessionEntry(await buildSessionEntry(filePath));
+    expect(entry.content).toBe(
+      "Assistant: Handled the first internal event.\n" +
+        "Assistant: Handled the second internal event.\n" +
+        "User: What changed?",
+    );
+    expect(entry.lineMap).toStrictEqual([2, 4, 5]);
+  });
 });
