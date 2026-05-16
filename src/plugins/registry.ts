@@ -51,7 +51,6 @@ import {
 import { buildPluginApi } from "./api-builder.js";
 import { normalizeRegisteredChannelPlugin } from "./channel-validation.js";
 import { CODEX_APP_SERVER_EXTENSION_RUNTIME_ID } from "./codex-app-server-extension-factory.js";
-import { getPluginCompatRecord } from "./compat/registry.js";
 import type { CodexAppServerExtensionFactory } from "./codex-app-server-extension-types.js";
 import {
   isReservedCommandName,
@@ -63,6 +62,7 @@ import {
   getRegisteredCompactionProvider,
   registerCompactionProvider,
 } from "./compaction-provider.js";
+import { getPluginCompatRecord } from "./compat/registry.js";
 import { sendPluginSessionAttachment } from "./host-hook-attachments.js";
 import {
   clearPluginRunContext,
@@ -888,6 +888,15 @@ export function createPluginRegistry(registryParams: PluginRegistryParams) {
       return;
     }
     const id = plugin.id;
+    if (record.origin === "workspace" && !record.enabled) {
+      pushDiagnostic({
+        level: "warn",
+        pluginId: record.id,
+        source: record.source,
+        message: `channel registration rejected for disabled workspace plugin: ${id}`,
+      });
+      return;
+    }
     const existingRuntime = registry.channels.find((entry) => entry.plugin.id === id);
     if (registrationCapabilities.runtimeChannel && existingRuntime) {
       if (existingRuntime.pluginId === record.id) {
