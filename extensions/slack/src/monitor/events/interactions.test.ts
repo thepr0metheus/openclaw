@@ -2830,7 +2830,7 @@ describe("registerSlackInteractionEvents", () => {
     const options = requireRecord(
       mockCallArg(enqueueSystemEventMock, 0, "enqueueSystemEvent", 1),
       "enqueueSystemEvent options",
-    ) as { sessionKey?: string };
+    ) as { forceSenderIsOwnerFalse?: boolean; sessionKey?: string };
     const payload = JSON.parse(eventText.replace("Slack interaction: ", "")) as {
       interactionType: string;
       actionId: string;
@@ -2866,6 +2866,7 @@ describe("registerSlackInteractionEvents", () => {
     ).toEqual(["canary"]);
     expect(trackEvent).toHaveBeenCalledTimes(1);
     expect(options.sessionKey).toBe("agent:main:slack:channel:C99");
+    expect(options.forceSenderIsOwnerFalse).toBe(true);
   });
 
   it("defaults modal close isCleared to false when Slack omits the flag", async () => {

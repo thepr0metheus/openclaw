@@ -1723,6 +1723,7 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
       {
         sessionKey,
         contextKey: "mode:elevated",
+        forceSenderIsOwnerFalse: false,
       },
     );
 
@@ -1739,6 +1740,7 @@ describe("handleDirectiveOnly model persist behavior (fixes #1435)", () => {
     expect(enqueueSystemEvent).toHaveBeenCalledWith("Reasoning STREAM - emit live <think>.", {
       sessionKey,
       contextKey: "mode:reasoning",
+      forceSenderIsOwnerFalse: false,
     });
   });
 

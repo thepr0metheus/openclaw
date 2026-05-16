@@ -62,7 +62,10 @@ const formatReasoningEvent = (level: ReasoningLevel) => {
 };
 
 export function enqueueModeSwitchEvents(params: {
-  enqueueSystemEvent: (text: string, meta: { sessionKey: string; contextKey: string }) => void;
+  enqueueSystemEvent: (
+    text: string,
+    meta: { sessionKey: string; contextKey: string; forceSenderIsOwnerFalse: boolean },
+  ) => void;
   sessionEntry: { elevatedLevel?: string | null; reasoningLevel?: string | null };
   sessionKey: string;
   elevatedChanged?: boolean;
@@ -73,6 +76,7 @@ export function enqueueModeSwitchEvents(params: {
     params.enqueueSystemEvent(formatElevatedEvent(nextElevated), {
       sessionKey: params.sessionKey,
       contextKey: "mode:elevated",
+      forceSenderIsOwnerFalse: false,
     });
   }
   if (params.reasoningChanged) {
@@ -80,6 +84,7 @@ export function enqueueModeSwitchEvents(params: {
     params.enqueueSystemEvent(formatReasoningEvent(nextReasoning), {
       sessionKey: params.sessionKey,
       contextKey: "mode:reasoning",
+      forceSenderIsOwnerFalse: false,
     });
   }
 }
