@@ -648,6 +648,7 @@ export async function executePreparedCliRun(
                   watchdogMainKey,
                   watchdogScope,
                 ),
+                forceSenderIsOwnerFalse: false,
               });
               executeDeps.requestHeartbeat(
                 scopedHeartbeatWakeOptions(

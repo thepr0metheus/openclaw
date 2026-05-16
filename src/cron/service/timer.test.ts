@@ -61,6 +61,7 @@ describe("cron service timer seam coverage", () => {
       agentId: undefined,
       sessionKey: "agent:main:main",
       contextKey: "cron:main-heartbeat-job",
+      forceSenderIsOwnerFalse: false,
     });
     expect(requestHeartbeat).toHaveBeenCalledWith({
       source: "cron",
@@ -146,6 +147,7 @@ describe("cron service timer seam coverage", () => {
       agentId: undefined,
       sessionKey: "agent:main:main",
       contextKey: "cron:main-heartbeat-job",
+      forceSenderIsOwnerFalse: false,
     });
 
     createTaskRecordSpy.mockRestore();

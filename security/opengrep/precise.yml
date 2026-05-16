@@ -2739,6 +2739,17 @@ rules:
               enqueueSystemEvent(`...${$X}...`, { ..., trusted: false, ... })
       - patterns:
           - pattern: |
+              $RECEIVER.enqueueSystemEvent(`...${$X}...`, $OPTS)
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent(`...${$X}...`, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent(`...${$X}...`, { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent(`...${$X}...`, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent(`...${$X}...`, { ..., trusted: false, ... })
+      - patterns:
+          - pattern: |
               enqueueSystemEvent($TEXT, $OPTS)
           - pattern-not: |
               enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
@@ -2748,6 +2759,20 @@ rules:
               enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
           - pattern-not-inside: |
               enqueueSystemEvent($TEXT, { ..., trusted: false, ... })
+          - metavariable-regex:
+              metavariable: $TEXT
+              regex: ^[a-zA-Z_$][a-zA-Z0-9_$]*$
+      - patterns:
+          - pattern: |
+              $RECEIVER.enqueueSystemEvent($TEXT, $OPTS)
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($TEXT, { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($TEXT, { ..., trusted: false, ... })
           - metavariable-regex:
               metavariable: $TEXT
               regex: ^[a-zA-Z_$][a-zA-Z0-9_$]*$

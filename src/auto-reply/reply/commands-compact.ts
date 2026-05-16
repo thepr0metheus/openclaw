@@ -303,6 +303,9 @@ export const handleCompactCommand: CommandHandler = async (params) => {
   const line = reason
     ? `${compactLabel}: ${reason} • ${contextSummary}`
     : `${compactLabel} • ${contextSummary}`;
-  runtime.enqueueSystemEvent(line, { sessionKey: params.sessionKey });
+  runtime.enqueueSystemEvent(line, {
+    sessionKey: params.sessionKey,
+    forceSenderIsOwnerFalse: false,
+  });
   return { shouldContinue: false, reply: { text: `⚙️ ${line}` } };
 };

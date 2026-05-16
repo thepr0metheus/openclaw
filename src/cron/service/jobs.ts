@@ -440,6 +440,7 @@ export function recordScheduleComputeError(params: {
       agentId: job.agentId,
       sessionKey: job.sessionKey,
       contextKey: `cron:${job.id}:auto-disabled`,
+      forceSenderIsOwnerFalse: false,
     });
     state.deps.requestHeartbeat({
       source: "cron",

@@ -41,6 +41,7 @@ export function registerSlackMemberEvents(params: {
       enqueueSystemEvent(`Slack: ${userLabel} ${params.verb} ${ingressContext.channelLabel}.`, {
         sessionKey: ingressContext.sessionKey,
         contextKey: `slack:member:${params.verb}:${channelId ?? "unknown"}:${payload.user ?? "unknown"}`,
+        forceSenderIsOwnerFalse: true,
       });
     } catch (err) {
       ctx.runtime.error?.(

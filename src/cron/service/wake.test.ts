@@ -27,7 +27,9 @@ describe("wake (cron timer)", () => {
   it("enqueues without sessionKey when omitted", () => {
     const { state, enqueueSystemEvent, requestHeartbeat } = createState();
     expect(wake(state, { mode: "now", text: "ping" })).toEqual({ ok: true });
-    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", undefined);
+    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", {
+      forceSenderIsOwnerFalse: false,
+    });
     expect(requestHeartbeat).toHaveBeenCalledWith({
       source: "manual",
       intent: "immediate",
@@ -46,6 +48,7 @@ describe("wake (cron timer)", () => {
     ).toEqual({ ok: true });
     expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", {
       sessionKey: "agent:main:telegram:dm:42",
+      forceSenderIsOwnerFalse: false,
     });
     expect(requestHeartbeat).toHaveBeenCalledWith({
       source: "manual",
@@ -70,6 +73,7 @@ describe("wake (cron timer)", () => {
     ).toEqual({ ok: true });
     expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", {
       sessionKey: "agent:main:slack:42",
+      forceSenderIsOwnerFalse: false,
     });
     expect(requestHeartbeat).toHaveBeenCalledWith({
       source: "manual",
@@ -82,14 +86,18 @@ describe("wake (cron timer)", () => {
   it("does not fire a wake on mode=next-heartbeat when no sessionKey is supplied", () => {
     const { state, enqueueSystemEvent, requestHeartbeat } = createState();
     expect(wake(state, { mode: "next-heartbeat", text: "ping" })).toEqual({ ok: true });
-    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", undefined);
+    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", {
+      forceSenderIsOwnerFalse: false,
+    });
     expect(requestHeartbeat).not.toHaveBeenCalled();
   });
 
   it("treats whitespace-only sessionKey as omitted", () => {
     const { state, enqueueSystemEvent, requestHeartbeat } = createState();
     wake(state, { mode: "now", text: "ping", sessionKey: "   " });
-    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", undefined);
+    expect(enqueueSystemEvent).toHaveBeenCalledWith("ping", {
+      forceSenderIsOwnerFalse: false,
+    });
     expect(requestHeartbeat).toHaveBeenCalledWith({
       source: "manual",
       intent: "immediate",

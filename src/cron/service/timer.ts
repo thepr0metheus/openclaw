@@ -736,7 +736,10 @@ function emitFailureAlert(
     return;
   }
 
-  state.deps.enqueueSystemEvent(text, { agentId: params.job.agentId });
+  state.deps.enqueueSystemEvent(text, {
+    agentId: params.job.agentId,
+    forceSenderIsOwnerFalse: false,
+  });
   if (params.job.wakeMode === "now") {
     state.deps.requestHeartbeat({
       source: "cron",
@@ -1693,6 +1696,7 @@ async function executeMainSessionCronJob(
     agentId: job.agentId,
     sessionKey: targetMainSessionKey,
     contextKey: `cron:${job.id}`,
+    forceSenderIsOwnerFalse: false,
   });
   if (job.wakeMode === "now" && state.deps.runHeartbeatOnce) {
     const reason = `cron:${job.id}`;
@@ -1944,7 +1948,10 @@ export function wake(
   if (sessionKey && isSubagentSessionKey(sessionKey)) {
     return { ok: false, reason: "unwakeable-session-key" } as const;
   }
-  state.deps.enqueueSystemEvent(text, sessionKey ? { sessionKey } : undefined);
+  state.deps.enqueueSystemEvent(text, {
+    ...(sessionKey ? { sessionKey } : {}),
+    forceSenderIsOwnerFalse: false,
+  });
   if (opts.mode === "now") {
     state.deps.requestHeartbeat({
       source: "manual",
