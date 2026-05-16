@@ -2786,6 +2786,17 @@ rules:
               regex: ^[a-zA-Z_$][a-zA-Z0-9_$]*$
       - patterns:
           - pattern: |
+              enqueueSystemEvent($OBJECT.$PROPERTY, $OPTS)
+          - pattern-not: |
+              enqueueSystemEvent($OBJECT.$PROPERTY, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              enqueueSystemEvent($OBJECT.$PROPERTY, { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              enqueueSystemEvent($OBJECT.$PROPERTY, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              enqueueSystemEvent($OBJECT.$PROPERTY, { ..., trusted: false, ... })
+      - patterns:
+          - pattern: |
               $RECEIVER.enqueueSystemEvent($TEXT, $OPTS)
           - pattern-not: |
               $RECEIVER.enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
@@ -2798,6 +2809,17 @@ rules:
           - metavariable-regex:
               metavariable: $TEXT
               regex: ^[a-zA-Z_$][a-zA-Z0-9_$]*$
+      - patterns:
+          - pattern: |
+              $RECEIVER.enqueueSystemEvent($OBJECT.$PROPERTY, $OPTS)
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($OBJECT.$PROPERTY, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($OBJECT.$PROPERTY, { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($OBJECT.$PROPERTY, { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($OBJECT.$PROPERTY, { ..., trusted: false, ... })
   - id: ghsa-gg9v-mgcp-v6m7.openclaw-bootstrap-token-legacy-acceptance-without-profile-record
     languages:
       - typescript
