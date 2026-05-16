@@ -666,6 +666,7 @@ export function createMSTeamsMessageHandler(deps: MSTeamsMessageHandlerDeps) {
           core.system.enqueueSystemEvent(formatParentContextEvent(parentSummary), {
             sessionKey: route.sessionKey,
             contextKey: `msteams:thread-parent:${conversationId}:${activity.replyToId}`,
+            forceSenderIsOwnerFalse: false,
           });
           markParentContextInjected(route.sessionKey, activity.replyToId);
         }

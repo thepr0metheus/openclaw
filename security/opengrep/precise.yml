@@ -2750,6 +2750,28 @@ rules:
               $RECEIVER.enqueueSystemEvent(`...${$X}...`, { ..., trusted: false, ... })
       - patterns:
           - pattern: |
+              enqueueSystemEvent($FORMATTER(...), $OPTS)
+          - pattern-not: |
+              enqueueSystemEvent($FORMATTER(...), { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              enqueueSystemEvent($FORMATTER(...), { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              enqueueSystemEvent($FORMATTER(...), { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              enqueueSystemEvent($FORMATTER(...), { ..., trusted: false, ... })
+      - patterns:
+          - pattern: |
+              $RECEIVER.enqueueSystemEvent($FORMATTER(...), $OPTS)
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($FORMATTER(...), { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not: |
+              $RECEIVER.enqueueSystemEvent($FORMATTER(...), { ..., trusted: false, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($FORMATTER(...), { ..., forceSenderIsOwnerFalse: $V, ... })
+          - pattern-not-inside: |
+              $RECEIVER.enqueueSystemEvent($FORMATTER(...), { ..., trusted: false, ... })
+      - patterns:
+          - pattern: |
               enqueueSystemEvent($TEXT, $OPTS)
           - pattern-not: |
               enqueueSystemEvent($TEXT, { ..., forceSenderIsOwnerFalse: $V, ... })
