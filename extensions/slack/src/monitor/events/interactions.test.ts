@@ -765,6 +765,7 @@ describe("registerSlackInteractionEvents", () => {
         },
         sessionKey: "agent:ops:slack:channel:C1",
         forceSenderIsOwnerFalse: true,
+        trusted: false,
       },
     );
     expect(resolveSessionKey).toHaveBeenCalledWith({
@@ -2830,7 +2831,7 @@ describe("registerSlackInteractionEvents", () => {
     const options = requireRecord(
       mockCallArg(enqueueSystemEventMock, 0, "enqueueSystemEvent", 1),
       "enqueueSystemEvent options",
-    ) as { forceSenderIsOwnerFalse?: boolean; sessionKey?: string };
+    ) as { forceSenderIsOwnerFalse?: boolean; sessionKey?: string; trusted?: boolean };
     const payload = JSON.parse(eventText.replace("Slack interaction: ", "")) as {
       interactionType: string;
       actionId: string;
@@ -2867,6 +2868,7 @@ describe("registerSlackInteractionEvents", () => {
     expect(trackEvent).toHaveBeenCalledTimes(1);
     expect(options.sessionKey).toBe("agent:main:slack:channel:C99");
     expect(options.forceSenderIsOwnerFalse).toBe(true);
+    expect(options.trusted).toBe(false);
   });
 
   it("defaults modal close isCleared to false when Slack omits the flag", async () => {

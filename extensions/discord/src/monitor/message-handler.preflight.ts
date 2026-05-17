@@ -725,6 +725,7 @@ export async function preflightDiscordMessage(
       sessionKey: effectiveRoute.sessionKey,
       contextKey: `discord:system:${messageChannelId}:${message.id}`,
       forceSenderIsOwnerFalse: true,
+      trusted: false,
     });
     return null;
   }

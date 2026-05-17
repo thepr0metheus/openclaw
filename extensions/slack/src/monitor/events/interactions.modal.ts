@@ -399,6 +399,7 @@ async function emitSlackModalLifecycleEvent(params: {
     sessionKey: sessionRouting.sessionKey,
     contextKey: [params.contextPrefix, callbackId, viewId, userId].filter(Boolean).join(":"),
     forceSenderIsOwnerFalse: true,
+    trusted: false,
   });
 }
 

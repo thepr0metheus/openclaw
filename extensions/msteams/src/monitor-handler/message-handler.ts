@@ -526,6 +526,7 @@ export function createMSTeamsMessageHandler(deps: MSTeamsMessageHandlerDeps) {
       sessionKey: route.sessionKey,
       contextKey: `msteams:message:${conversationId}:${activity.id ?? "unknown"}`,
       forceSenderIsOwnerFalse: skippedAmbientMessage,
+      ...(skippedAmbientMessage ? { trusted: false } : {}),
     });
 
     if (!isDirectMessage) {

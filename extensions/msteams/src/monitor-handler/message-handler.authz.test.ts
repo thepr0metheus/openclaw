@@ -701,6 +701,10 @@ describe("msteams monitor handler authz", () => {
       systemEventMetaForTextPrefix(enqueueSystemEvent, "Teams message in groupChat from Attacker:")
         .forceSenderIsOwnerFalse,
     ).toBe(true);
+    expect(
+      systemEventMetaForTextPrefix(enqueueSystemEvent, "Teams message in groupChat from Attacker:")
+        .trusted,
+    ).toBe(false);
   });
 
   it("filters non-allowlisted thread messages out of BodyForAgent", async () => {

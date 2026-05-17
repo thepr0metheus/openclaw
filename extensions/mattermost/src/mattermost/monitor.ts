@@ -2029,6 +2029,7 @@ export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}
       sessionKey,
       contextKey: `mattermost:reaction:${postId}:${emojiName}:${userId}:${action}`,
       forceSenderIsOwnerFalse: true,
+      trusted: false,
     });
 
     logVerboseMessage(

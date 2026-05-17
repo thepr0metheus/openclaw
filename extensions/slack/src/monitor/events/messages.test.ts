@@ -378,6 +378,7 @@ describe("registerSlackMessageEvents", () => {
     expect(messageQueueMock).toHaveBeenCalledTimes(1);
     expect(messageQueueMock.mock.calls[0]?.[1]).toMatchObject({
       forceSenderIsOwnerFalse: true,
+      trusted: false,
     });
   });
 

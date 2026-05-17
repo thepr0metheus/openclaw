@@ -117,6 +117,7 @@ export function createMSTeamsReactionHandler(deps: MSTeamsMessageHandlerDeps) {
         sessionKey: route.sessionKey,
         contextKey: `msteams:reaction:${conversationId}:${targetMessageId}:${senderId}:${reactionType}:${direction}`,
         forceSenderIsOwnerFalse: true,
+        trusted: false,
       });
     }
   };

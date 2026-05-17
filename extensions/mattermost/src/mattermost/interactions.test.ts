@@ -923,6 +923,7 @@ describe("createMattermostInteractionHandler", () => {
         sessionKey: "agent:main:mattermost:acct:chan-1",
         contextKey: "mattermost:interaction:post-1:approve",
         forceSenderIsOwnerFalse: true,
+        trusted: false,
       },
     );
   });
