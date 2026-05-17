@@ -41,8 +41,12 @@ describe("msteams thread parent context injection", () => {
 
   function findParentSystemEventCall(
     mock: ReturnType<typeof vi.fn>,
-  ): [string, { sessionKey: string; contextKey?: string }] | undefined {
-    const calls = mock.mock.calls as Array<[string, { sessionKey: string; contextKey?: string }]>;
+  ):
+    | [string, { sessionKey: string; contextKey?: string; forceSenderIsOwnerFalse?: boolean }]
+    | undefined {
+    const calls = mock.mock.calls as Array<
+      [string, { sessionKey: string; contextKey?: string; forceSenderIsOwnerFalse?: boolean }]
+    >;
     return calls.find(([text]) => text.startsWith("Replying to @"));
   }
 
