@@ -208,6 +208,7 @@ function expectMainSystemEventPosted(
     agentId: undefined,
     ...(params.sessionKey ? { sessionKey: params.sessionKey } : {}),
     contextKey: `cron:${params.jobId}`,
+    forceSenderIsOwnerFalse: false,
   });
 }
 
