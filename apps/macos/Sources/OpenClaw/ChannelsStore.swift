@@ -229,6 +229,7 @@ final class ChannelsStore {
             self.decodedChannelCache.removeAll(keepingCapacity: true)
         }
     }
+
     var lastError: String?
     var lastSuccess: Date?
     var isRefreshing = false
