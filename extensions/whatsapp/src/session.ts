@@ -9,7 +9,6 @@ import {
 } from "openclaw/plugin-sdk/fetch-runtime";
 import { danger, success } from "openclaw/plugin-sdk/runtime-env";
 import { getChildLogger, toPinoLikeLogger } from "openclaw/plugin-sdk/runtime-env";
-import { replaceFileAtomic } from "openclaw/plugin-sdk/security-runtime";
 import { ensureDir, resolveUserPath } from "openclaw/plugin-sdk/text-utility-runtime";
 import {
   readCredsJsonRaw,
@@ -23,6 +22,7 @@ import {
   enqueueCredsSave,
   waitForCredsSaveQueueWithTimeout,
   writeCredsJsonAtomically,
+  writeWebCredsRawAtomically,
 } from "./creds-persistence.js";
 import { renderQrTerminal } from "./qr-terminal.js";
 import { getStatusCode } from "./session-errors.js";
@@ -101,14 +101,10 @@ async function safeSaveCreds(
     if (raw) {
       try {
         JSON.parse(raw);
-        await replaceFileAtomic({
+        await writeWebCredsRawAtomically({
           filePath: backupPath,
           content: raw,
-          dirMode: 0o700,
-          mode: 0o600,
           tempPrefix: ".creds.backup",
-          syncTempFile: true,
-          syncParentDir: true,
         });
       } catch {
         // keep existing backup
